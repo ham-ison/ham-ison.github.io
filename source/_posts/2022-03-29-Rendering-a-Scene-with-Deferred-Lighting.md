@@ -1,6 +1,6 @@
 ---
-title: {{ title }}
-date: {{ date }}
+title: Rendering a Scene with Deferred Lighting
+date: 2022-03-29 19:00:00
 tags: [Metal, 图形学]
 categories: [设计开发, 图形学]
 cover: 
