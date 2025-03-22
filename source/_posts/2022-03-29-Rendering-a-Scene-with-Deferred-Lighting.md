@@ -3,13 +3,13 @@ title: Rendering a Scene with Deferred Lighting
 date: 2022-03-29 19:00:00
 tags: [Metal, 图形学]
 categories: [设计开发, 图形学]
-cover: 
-banner:
+cover: assets/images/home-bg.png
+banner: assets/images/home-bg.png
 poster:
-  topic: Rendering a Scene with Deferred Lighting2
-  headline: Rendering a Scene with Deferred Lighting3
-  caption: Rendering a Scene with Deferred Lighting4
-  color: red
+  topic: Metal
+  headline: Deferred Lighting
+  caption: Rendering a Scene
+  color: blue
 article:
   auto_excerpt: 200
   # npm i hexo-related-popular-posts
@@ -18,9 +18,6 @@ article:
     enable: true
     title: 您可能感兴趣的文章
     limit: 10
-    exclude:
-      - title: {{ title }}
-        permalink: {{ permalink }}
 header-img: "img/post-bg.png"
 # 插件
 sticky: # 数字越大越靠前

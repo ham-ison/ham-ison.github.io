@@ -5,9 +5,9 @@
 # Site
 title: Ham' Notes
 subtitle: 'Bionic Engine'
-avatar: /images/logo/AM.ico
+avatar: images/logo/AM.ico
 description: 'Software Architecture, Engineering, and Design'
-keywords:
+keywords: Bionic,Engine,Software,Architecture,Engineering,Design
 author: HAM < hamiosn@qq.com >
 language: ZH-CN
 timezone: 'Asia/Shanghai'

@@ -3,6 +3,7 @@ layout: post
 title: "使用Trae AI来创建ison7工程"
 subtitle: "Use Trae AI to create ison7 project"
 date: 2025-03-21
+cover: assets/images/tag-bg.png
 author: "HAM"
 header-img: "img/post-bg.png"
 tags: []
