@@ -1,0 +1,8 @@
+
+open_graph:
+  enable: true
+  twitter_id: # for open_graph meta
+
+article:
+  type: tech # tech/story
+  auto_cover: true
