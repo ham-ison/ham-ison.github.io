@@ -102,4 +102,4 @@ theme: stellar
 deploy:
   type: git
   repo: git@github.com:ham-ison/ham-ison.github.io.git
-  branch: master
+  branch: pg-branch
