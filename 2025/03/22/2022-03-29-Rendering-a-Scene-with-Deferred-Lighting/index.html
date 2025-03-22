@@ -1,0 +1,728 @@
+
+<!DOCTYPE html><html lang="ZH-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>[object Object] - Ham' Notes</title>
+
+  
+    <meta name="description" content="Tile-based模式的GPU光照的计算是非常消耗计算资源的，为了减少光照的重复计算，通过实施延时光照渲染来进行优化。 概述通过Apple例子来看一下延时光照渲染实施方法，这个例子应用shadow map（阴影贴图）实现阴影，并使用模版缓冲区剔除光量。  与 Forward lighting相比，Deferred lighting可以渲染大量的灯光数量。比如，在Forward lighting模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[object Object]">
+<meta property="og:url" content="https://ham-ison.github.io/2025/03/22/2022-03-29-Rendering-a-Scene-with-Deferred-Lighting/index.html">
+<meta property="og:site_name" content="Ham&#39; Notes">
+<meta property="og:description" content="Tile-based模式的GPU光照的计算是非常消耗计算资源的，为了减少光照的重复计算，通过实施延时光照渲染来进行优化。 概述通过Apple例子来看一下延时光照渲染实施方法，这个例子应用shadow map（阴影贴图）实现阴影，并使用模版缓冲区剔除光量。  与 Forward lighting相比，Deferred lighting可以渲染大量的灯光数量。比如，在Forward lighting模">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387801023.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387658847.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387518183.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387423771.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387332519.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387259504.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387010860.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386882590.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386623044.jpg">
+<meta property="og:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386773275.jpg">
+<meta property="article:published_time" content="2025-03-22T02:59:43.170Z">
+<meta property="article:modified_time" content="2025-03-22T02:59:43.170Z">
+<meta property="article:author" content="HAM &lt; hamiosn@qq.com &gt;">
+<meta property="article:tag" content="Metal">
+<meta property="article:tag" content="图形学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387801023.jpg">
+  
+  
+  
+  <meta name="keywords" content="Metal,图形学">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/logo/AM.ico" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Ham' Notes</div><div class="sub cap">Bionic Engine</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/21/2025-03-16-%E4%BD%BF%E7%94%A8Trae%20AI%E6%9D%A5%E5%88%9B%E5%BB%BAison7%E5%B7%A5%E7%A8%8B/"><span class="title">使用Trae AI来创建ison7工程</span></a><a class="item title" href="/2025/03/22/2022-03-29-Rendering-a-Scene-with-Deferred-Lighting/"><span class="title">[object Object]</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/%E5%9B%BE%E5%BD%A2%E5%AD%A6/">图形学</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-03-22T02:59:43.170Z">2025-03-22</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-03-22T02:59:43.170Z">2025-03-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>[object Object]</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>Tile-based模式的GPU光照的计算是非常消耗计算资源的，为了减少光照的重复计算，通过实施延时光照渲染来进行优化。</p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>通过Apple例子来看一下延时光照渲染实施方法，这个例子应用shadow map（阴影贴图）实现阴影，并使用模版缓冲区剔除光量。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387801023.jpg"></p>
+<p>与 Forward lighting相比，Deferred lighting可以渲染大量的灯光数量。比如，在Forward lighting模式下，如果场景中有很多光源，无法对每个光源在每个片元上作用的计算量进行全量计算。需要应用到复杂的排序和像素合并算法来筛除对每个片元能产生作用的光源来限制计算量。使用Deferred lighting，可以容易地将多个光源应用到场景中。</p>
+<h1 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h1><p>在开始解读示例代码的之前，回顾一下以下概念可以更好的理解关键细节。</p>
+<h2 id="传统延时光照渲染"><a href="#传统延时光照渲染" class="headerlink" title="传统延时光照渲染"></a>传统延时光照渲染</h2><p>传统延时光照渲染通常分为两个渲染通道：</p>
+<ul>
+<li>第一个渲染通道：G-buffer 渲染。渲染器绘制和变换场景里的模型，片元函数将渲染结果输出到 “几何缓冲区” 和 “G-Buffer”中。G-Buffer包含了模型的材料颜色信息，以及每个片元的法线、阴影和深度信息。</li>
+<li>第二个渲染通道：延时光照和构图。渲染器绘制每个光柱，使用G-Buffer中的数据重建每个片元的位置信息并应用光照计算。绘制光源时，该光源输出为混合前一个光源的输出后的结果。最后，渲染器将其他数据（如阴影和定向光照）合成到场景中。</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387658847.jpg"></p>
+<p>一些macOS的GPU是”即时渲染”（IMR）架构。IMR GPU延时光照只能通过两个渲染通道实现。所以这个例子的macOS版本实现了两个通道的延时光照算法。</p>
+<h2 id="Apple芯片GPU上的单通道延时光照"><a href="#Apple芯片GPU上的单通道延时光照" class="headerlink" title="Apple芯片GPU上的单通道延时光照"></a>Apple芯片GPU上的单通道延时光照</h2><p>Apple芯片GPU使用了基于磁贴分片的延迟渲染（TBDR）架构，TBDR架构在GPU内部专门为第一块磁贴设计了内存来存储渲染数据。渲染结果存储到磁贴内存中，可以避免数据在GPU和系统内存中所花费的大量资源消耗，GPU和系统内存DDR是通过带宽受限的内存总线交换数据。GPU什么时候需要将磁贴内存写入到系统内存取决于以下配置情况：</p>
+<ul>
+<li>应用程序主动执行了存储命令</li>
+<li>应用程序纹理的存储模式<br>将 “MTLStoreAction.store”设置为存储操作时，渲染通道中的渲染目标的输出数据将从磁贴内存中写入系统内存。如果这些数据将用于后续的渲染通道，这些纹理将做为输入数据从系统内存中读入到GPU的纹理缓存中。因此，传统的延时光照渲染器要求第一次和第二次渲染通道之间将G-Buffer数据存储在系统内存中。</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387518183.jpg"></p>
+<p>由于TBDR架构允许在任何时间从磁贴内存中读取数据。这允许片元着色器从磁贴内存中读取数据并对渲染目标进行计算，然后将数据再次写入磁贴内存。这个特性避免了在第一次和第二次渲染通道之间将G-Buffer数据存储到系统内存中。所以，TBDR架构下延迟光照渲染器可以通过单个渲染通道实现。<br>G- Buffer在单个渲染通道由GPU（而不是CPU）生成和使用。因此，在渲染通道开始之前，不会从系统内存中加载数据，也不会在渲染通道完成后将结果存储在系统内存中。光照片元函数不是从系统内存中的纹理读取G-Buffer数据，而是从G-Buffer读取数据，同时它仍然作为渲染目标附加到渲染通道。因此，不需要为G-Buffer纹理分配系统内存，可以使用MTLStorageMode.memoryless存储模式声明这些纹理。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387423771.jpg"></p>
+<p>允许TBDR GPU从片元函数中附加的渲染目标读取数据的特性称为”可编程混合”</p>
+<h2 id="具有栅格顺序组的延时光照"><a href="#具有栅格顺序组的延时光照" class="headerlink" title="具有栅格顺序组的延时光照"></a>具有栅格顺序组的延时光照</h2><p>默认情况下，当片元着色器将数据写入像素时，GPU会等到着色程序完全完成对该像素的写入后，再开始为同一个像素执行另一个片元着色程序。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387332519.jpg"></p>
+<p>栅格顺序组允许应用程序增加GPU片元着色器的并行化。使用栅格顺序组，片元函数可以将渲染目标分隔到不同的执行组中。这种分离执行允许GPU在片元着色器的上一个实例完成时将数据写入另一个组的像素之前，读取一个组中的渲染目标并对其执行计算。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387259504.jpg"></p>
+<p>在示例程序中，一些光照片元函数使用了栅格顺序组：</p>
+<ul>
+<li>Raster order group 0. “AAPLLightingROG” 用于包含光照计算结果的渲染目标</li>
+<li>Raster order group 1. “AAPLGBufferROG” 用于光照函数中G-Buffer数据。</li>
+</ul>
+<p>这些栅格顺序组允许GPU在上一个片元着色器完成光照计算并写入输出数据之前读取片元着色器中的G-Buffer并执行光照计算。</p>
+<h2 id="渲染延时光照帧"><a href="#渲染延时光照帧" class="headerlink" title="渲染延时光照帧"></a>渲染延时光照帧</h2><p>这个示例通过以下阶段来显示完整帧：</p>
+<ol>
+<li>阴影贴图</li>
+<li>G-Buffer</li>
+<li>定向光</li>
+<li>光蒙板</li>
+<li>点光源</li>
+<li>天空盒</li>
+<li>彩色小灯</li>
+</ol>
+<p>示例的单通道延时渲染器生成G-Buffer并在单个渲染通道中执行所有后续阶段。由于IOS和tvOS的GPU是TBDR架构，单通道实现允许设备从磁贴内存中的渲染目标读取G-Buffer数据。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">encodePass(into: commandBuffer, </span><br><span class="line">           using: gBufferAndLightingPassDescriptor, </span><br><span class="line">           label: <span class="string">&quot;GBuffer &amp; Lighting Pass&quot;</span>) &#123; renderEncoder <span class="keyword">in</span></span><br><span class="line">    </span><br><span class="line">    encodeGBufferStage(using: renderEncoder)</span><br><span class="line">    encodeDirectionalLightingStage(using: renderEncoder)</span><br><span class="line">    encodeLightMaskStage(using: renderEncoder)</span><br><span class="line">    encodePointLightStage(using: renderEncoder)</span><br><span class="line">    encodeSkyboxStage(using: renderEncoder)</span><br><span class="line">    encodeFairyBillboardStage(using: renderEncoder)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>示例程序的传统延时渲染在一个渲染通道中生成G-Buffer，然后在另一个渲染通道中执行后续</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">encodePass(into: commandBuffer,</span><br><span class="line">           using: gBufferPassDescriptor,</span><br><span class="line">           label: <span class="string">&quot;GBuffer Generation Pass&quot;</span>) &#123; renderEncoder <span class="keyword">in</span></span><br><span class="line"></span><br><span class="line">    encodeGBufferStage(using: renderEncoder)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">encodePass(into: commandBuffer,</span><br><span class="line">           using: lightingPassDescriptor,</span><br><span class="line">           label: <span class="string">&quot;Lighting Pass&quot;</span>) &#123; (renderEncoder) <span class="keyword">in</span></span><br><span class="line">            </span><br><span class="line">    encodeDirectionalLightingStage(using: renderEncoder)</span><br><span class="line">    encodeLightMaskStage(using: renderEncoder)</span><br><span class="line">    encodePointLightStage(using: renderEncoder)</span><br><span class="line">    encodeSkyboxStage(using: renderEncoder)</span><br><span class="line">    encodeFairyBillboardStage(using: renderEncoder)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="渲染阴影贴图"><a href="#渲染阴影贴图" class="headerlink" title="渲染阴影贴图"></a>渲染阴影贴图</h2><p>示例程序通过从光源的透视渲染模型，为场景中的单个定向光源（太阳）渲染阴影贴图。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492387010860.jpg"></p>
+<p>阴影贴图的渲染管线有顶点函数，但是没有片元函数。因此，这个示例程序无需执行渲染管线的后续阶段就可确定写入阴影贴图的屏幕空间深度值。渲染器执行由于没有片元函数，因此执行很快。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lazy</span> <span class="keyword">var</span> shadowGeneration <span class="operator">=</span> makeRenderPipelineState(label: <span class="string">&quot;Shadow Generation Stage&quot;</span>) &#123; descriptor <span class="keyword">in</span></span><br><span class="line">    descriptor.vertexFunction <span class="operator">=</span> library.makeFunction(name: <span class="string">&quot;shadow_vertex&quot;</span>)</span><br><span class="line">    descriptor.depthAttachmentPixelFormat <span class="operator">=</span> .depth32Float</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>在为阴影贴图绘制几何图形之前，该示例程序设置了深度偏差值以减少阴影伪影：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">renderEncoder.setDepthBias(<span class="number">0.015</span>, slopeScale: <span class="number">7</span>, clamp: <span class="number">0.02</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>然后，在片元函数的G-Buffer阶段，示例程序判断片元是否被遮挡或被阴影遮罩。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Compare the depth value in the shadow map to the depth value of the fragment in the sun&#x27;s.</span></span><br><span class="line"><span class="comment">// frame of reference.  If the sample is occluded, it will be zero.</span></span><br><span class="line"><span class="type">float</span> shadow_sample = shadowMap.<span class="built_in">sample_compare</span>(shadowSampler, in.shadow_coord.xy, in.shadow_coord.z);</span><br></pre></td></tr></table></figure>
+
+
+<p>示例程序将sample_compare函数的结果存储在 normal_shadow的渲染目标的”W”组件中</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gBuffer.normal_shadow = <span class="built_in">half4</span>(eye_normal.xyz, shadow_sample);</span><br></pre></td></tr></table></figure>
+
+
+<p>在定向光和点光源合成阶段，示例程序从G-Buffer中读取阴影值并应用到片元上。</p>
+<h2 id="渲染G-Buffer"><a href="#渲染G-Buffer" class="headerlink" title="渲染G-Buffer"></a>渲染G-Buffer</h2><p>示例程序包含以下纹理：</p>
+<ul>
+<li>albedoSpecular：存储反射率和镜面反射数据，反射数据存储在”x”, “y”,和”z”分量中，镜面反射数据存储在”w”分量中。</li>
+<li>normalShadow：存储法线和阴影数据。法线数据存储在 “x”, “y”和”z”分量中，阴影数据存储在”w”分量中。</li>
+<li>depth：存储视野空间的深度信息值。</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386882590.jpg"></p>
+<p>示例程序渲染G-Buffer，传统渲染器和单通道延时渲染器都将所有G-Buffer纹理做为渲染通道的渲染目标。然而，由于使用TBDR架构的设备即可以渲染G-Buffer，也可以在单渲染通道中读取G-Buffer。因此这个示例程序将创建具有无内存存储模式的G-Buffer纹理，这表示不会为这些纹理分配系统内存。相反，这些纹理仅在渲染通道期间在磁贴内存中分配和填充。</p>
+<p>示例程序根据”drawableSizeWillChange”属性来决定如何创建G-Buffer纹理。单通道延迟渲染将”storageMode”变量设置为”MTLStorageMode.memoryless”,而传统的延迟渲染将其设置为MTLStroageMode.private.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> storageMode <span class="operator">=</span> <span class="type">MTLStorageMode</span>.private</span><br></pre></td></tr></table></figure>
+
+
+<p>对于传统的延迟渲染，在示例程序完成了G-Buffer纹理的写数据后，它会调用”endEncoding”方法来完成G-Buffer渲染通道。由于渲染命令编码器的存储操作设置为”MTLStoreAction.store”,因此GPU会在编码器完成执行后将每个渲染目标纹理写入”Video”内存。这允许示例程序在随后的延迟光照和构图渲染通道中从”Video”内存中读取这些数据。</p>
+<p>对于单通道延迟渲染器，在示例程序完成G-Buffer纹理写入数据后，示例程序不会完成渲染命令编码器，而是继续将其用于后续阶段。</p>
+<h2 id="应用定向光照和阴影"><a href="#应用定向光照和阴影" class="headerlink" title="应用定向光照和阴影"></a>应用定向光照和阴影</h2><p>该示例程序将定向光照和阴影应用于要显示的可绘制对象。</p>
+<p>传统的延迟渲染器从设置为片元函数的参数的纹理中读取G-Buffer数据：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fragment half4</span><br><span class="line">deferred_directional_lighting_fragment_traditional(</span><br><span class="line">    <span class="type">QuadInOut</span>                <span class="keyword">in</span>                      [[ stage_in ]],</span><br><span class="line">    constant <span class="type">AAPLFrameData</span> <span class="operator">&amp;</span> frameData               [[ buffer(<span class="type">AAPLBufferFrameData</span>) ]],</span><br><span class="line">    texture2d<span class="operator">&lt;</span>half<span class="operator">&gt;</span>          albedo_specular_GBuffer [[ texture(<span class="type">AAPLRenderTargetAlbedo</span>) ]],</span><br><span class="line">    texture2d<span class="operator">&lt;</span>half<span class="operator">&gt;</span>          normal_shadow_GBuffer   [[ texture(<span class="type">AAPLRenderTargetNormal</span>) ]],</span><br><span class="line">    texture2d<span class="operator">&lt;</span>float<span class="operator">&gt;</span>         depth_GBuffer           [[ texture(<span class="type">AAPLRenderTargetDepth</span>)  ]])</span><br></pre></td></tr></table></figure>
+
+
+<p>单通道延迟渲染器从附加到渲染通道的渲染目标中读取G-Buffer数据：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">GBufferData</span></span><br><span class="line">&#123;</span><br><span class="line">    half4 lighting        [[color(<span class="type">AAPLRenderTargetLighting</span>), raster_order_group(<span class="type">AAPLLightingROG</span>)]];</span><br><span class="line">    half4 albedo_specular [[color(<span class="type">AAPLRenderTargetAlbedo</span>),   raster_order_group(<span class="type">AAPLGBufferROG</span>)]];</span><br><span class="line">    half4 normal_shadow   [[color(<span class="type">AAPLRenderTargetNormal</span>),   raster_order_group(<span class="type">AAPLGBufferROG</span>)]];</span><br><span class="line">    float depth           [[color(<span class="type">AAPLRenderTargetDepth</span>),    raster_order_group(<span class="type">AAPLGBufferROG</span>)]];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deferred_directional_lighting_fragment_single_pass(</span><br><span class="line">    <span class="type">QuadInOut</span>                <span class="keyword">in</span>        [[ stage_in ]],</span><br><span class="line">    constant <span class="type">AAPLFrameData</span> <span class="operator">&amp;</span> frameData [[ buffer(<span class="type">AAPLBufferFrameData</span>) ]],</span><br><span class="line">    <span class="type">GBufferData</span>              <span class="type">GBuffer</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>尽管这些片元函数有不同的输入，但是它们在”deferred_directional_lighting_fragment_common”片元函数中共享一个共同的实现。这个函数执行以下操作：</p>
+<ul>
+<li>从G-Buffer法线数据重建法线以计算漫反射项。</li>
+<li>根据G-Buffer深度数据重建视野空间位置，并应用镜面反射高光。</li>
+<li>使用G-Buffer阴影数据使片元变暗，并将阴影应用于场景。</li>
+</ul>
+<p>由于这是渲染到可绘制对象的第一个阶段，因此iOS和tvOS渲染器会在较早的G-Buffer阶段之前获取可绘制对象，这样可绘制对象可以与后续阶段的输出合并。然而，传统的延迟渲染器会延迟获取可绘制对象，一直到G-Buffer阶段完成之后和开始计算定向光之前。这种延迟减少了应用程序在绘制对象上花费的时间，从而提高了性能。</p>
+<p>由于”DepthStencilStates”对象的”directionalLighting”属性的状态，”deferred_directional_lighting_fragment”函数仅对应点亮的片元执行。这种优化简单而重要，可以节省许多片元着色器执行的周期。</p>
+<h2 id="剔除光源体积"><a href="#剔除光源体积" class="headerlink" title="剔除光源体积"></a>剔除光源体积</h2><p>这个示例程序创建一个模版蒙板，用来避免对许多片元执行昂贵的光照计算。它通过使用G-Buffer通道中的深度缓冲区和模版缓冲区来创建此模版蒙板，以跟踪光体积与其他几何体相交。（如果没有相交，那么它就不会照亮任何东西）</p>
+<p>在”encodeLightMaskStage”实现中，本示例程序设置”PipelineStates”类的”lightMask”对象，并对实例化的绘制调用进行编码，用来绘制二十面体的背面，这些二十面体包含点光源的体积。如果此绘制调用中片元未通过深度测试，则此结果指示二十面体的背面位于某些几何图形后面。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">renderEncoder.setRenderPipelineState(lightMaskPipelineState)</span><br><span class="line">renderEncoder.setDepthStencilState(lightMaskDepthStencilState)</span><br><span class="line"></span><br><span class="line">renderEncoder.setStencilReferenceValue(<span class="number">128</span>)</span><br><span class="line">renderEncoder.setCullMode(.front)</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.frameData,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferFrameData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.pointLights,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferIndexLightsData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.lightPositions,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferIndexLightsPosition</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setFragmentBuffer(scene.frameData,</span><br><span class="line">                                offset: <span class="number">0</span>,</span><br><span class="line">                                index: <span class="type">Int</span>(<span class="type">AAPLBufferFrameData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.draw(meshes: [scene.icosahedron],</span><br><span class="line">                   instanceCount: scene.numberOfLights,</span><br><span class="line">                   requiresMaterials: <span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>“lightMask”管线对象没有片元函数，因此不会从此渲染管线写入任何颜色数据。但是，由于设置了”lightMask”深度和模版状态，任何未通过深度测试的片元都会增加片元的模版缓冲区。包含几何图形的片元的起始深度值为”128”，示例程序在G-Buffer阶段设置了这个值。因此，任何未通过深度测试的片元都将会深度值递增为大于”128”。（由于使能了正面剔除，因此未通过深度测试且值大于”128”的片元表示至少二十面体的后半部分位于所有几何图形的后面。）</p>
+<p>在下一个绘制调用中， 在”encodePointLightStage”实现中，该示例程序将点光源的贡献应用于可绘制对象。该示例程序测试二十面体的前半部分是否在所有几何体的前面，这决定了光体积是否与某些几何体相交，从而确实片元是否应该被点亮。仅当片元的模版值大于”128”的引用值时，为此绘制调用设置的深度和模版状态”pointLight”仅执行片元函数。（由于模版测试值设置为”MTLCompareFunction.less”,因此仅当参考值”128”小于模版缓冲区中的值时，示例程序才会通过测试。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">renderEncoder.setRenderPipelineState(lightMaskPipelineState)</span><br><span class="line">renderEncoder.setDepthStencilState(lightMaskDepthStencilState)</span><br><span class="line"></span><br><span class="line">renderEncoder.setStencilReferenceValue(<span class="number">128</span>)</span><br><span class="line">renderEncoder.setCullMode(.front)</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.frameData,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferFrameData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.pointLights,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferIndexLightsData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.lightPositions,</span><br><span class="line">                              offset: <span class="number">0</span>,</span><br><span class="line">                              index: <span class="type">Int</span>(<span class="type">AAPLBufferIndexLightsPosition</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.setFragmentBuffer(scene.frameData,</span><br><span class="line">                                offset: <span class="number">0</span>,</span><br><span class="line">                                index: <span class="type">Int</span>(<span class="type">AAPLBufferFrameData</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.draw(meshes: [scene.icosahedron],</span><br><span class="line">                   instanceCount: scene.numberOfLights,</span><br><span class="line">                   requiresMaterials: <span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>由于”encodeLightMaskStage”中的绘制调用会增加任何几何图形后面的片元的模版值，因此示例程序对其执行片元函数的唯一片元是满足以下两个条件的片元：</p>
+<ul>
+<li>正面通过深度测试且位于某些几何形状前面的片元</li>
+<li>背面未通过深度测试且位于某些几何形状后面的片元</li>
+</ul>
+<p>下面显示了使用此模版蒙板算法的渲染帧与不使用此模版蒙板算法的渲染帧在片元覆盖率方面的差异。算法使能后，绿色像素是为其执行点光源片元函数的像素。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386623044.jpg"></p>
+<p>禁用算法时，绿色和红色的像素是其执行点光源片元函数的像素。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://armison-blog-1309315531.cos.ap-shanghai.myqcloud.com/2022/04/06/16492386773275.jpg"></p>
+<h2 id="渲染天空盒和彩色光源"><a href="#渲染天空盒和彩色光源" class="headerlink" title="渲染天空盒和彩色光源"></a>渲染天空盒和彩色光源</h2><p>在最终的光照阶段，示例程序将更简单的光照技术应用到场景中。</p>
+<p>示例程序对模型的几何体在天空盒的深度测试，渲染器仅渲染可以被几何体填充的部分。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">renderEncoder.setRenderPipelineState(pipelineStates.skybox)</span><br><span class="line">renderEncoder.setDepthStencilState(depthStencilStates.skybox)</span><br><span class="line"></span><br><span class="line">renderEncoder.setCullMode(.front)</span><br><span class="line"></span><br><span class="line">renderEncoder.setVertexBuffer(scene.frameData, offset: <span class="number">0</span>, index: <span class="type">Int</span>(<span class="type">AAPLBufferFrameData</span>.rawValue))</span><br><span class="line">renderEncoder.setFragmentTexture(scene.skyMap, index: <span class="type">Int</span>(<span class="type">AAPLTextureIndexBaseColor</span>.rawValue))</span><br><span class="line"></span><br><span class="line">renderEncoder.draw(meshes: [scene.skyMesh],</span><br><span class="line">                   requiresMaterials: <span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p>示例程序将彩色光源渲染到可绘制的2D圆形区域，并使用纹理来确定其片元的透明混合因子。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">half4 c <span class="operator">=</span> colorMap.sample(linearSampler, float2(<span class="keyword">in</span>.tex_coord));</span><br><span class="line"></span><br><span class="line">half3 fragColor <span class="operator">=</span> <span class="keyword">in</span>.color <span class="operator">*</span> c.x;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> half4(fragColor, c.x);</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2025/03/21/2025-03-16-%E4%BD%BF%E7%94%A8Trae%20AI%E6%9D%A5%E5%88%9B%E5%BB%BAison7%E5%B7%A5%E7%A8%8B/">使用Trae AI来创建ison7工程</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">HAM &lt; hamiosn@qq.com &gt;</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1">Stellar 1.29.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="toc-text">重要概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E5%BB%B6%E6%97%B6%E5%85%89%E7%85%A7%E6%B8%B2%E6%9F%93"><span class="toc-text">传统延时光照渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apple%E8%8A%AF%E7%89%87GPU%E4%B8%8A%E7%9A%84%E5%8D%95%E9%80%9A%E9%81%93%E5%BB%B6%E6%97%B6%E5%85%89%E7%85%A7"><span class="toc-text">Apple芯片GPU上的单通道延时光照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E6%9C%89%E6%A0%85%E6%A0%BC%E9%A1%BA%E5%BA%8F%E7%BB%84%E7%9A%84%E5%BB%B6%E6%97%B6%E5%85%89%E7%85%A7"><span class="toc-text">具有栅格顺序组的延时光照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E5%BB%B6%E6%97%B6%E5%85%89%E7%85%A7%E5%B8%A7"><span class="toc-text">渲染延时光照帧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E9%98%B4%E5%BD%B1%E8%B4%B4%E5%9B%BE"><span class="toc-text">渲染阴影贴图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93G-Buffer"><span class="toc-text">渲染G-Buffer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9A%E5%90%91%E5%85%89%E7%85%A7%E5%92%8C%E9%98%B4%E5%BD%B1"><span class="toc-text">应用定向光照和阴影</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%94%E9%99%A4%E5%85%89%E6%BA%90%E4%BD%93%E7%A7%AF"><span class="toc-text">剔除光源体积</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E5%A4%A9%E7%A9%BA%E7%9B%92%E5%92%8C%E5%BD%A9%E8%89%B2%E5%85%89%E6%BA%90"><span class="toc-text">渲染天空盒和彩色光源</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

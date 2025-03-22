@@ -1,0 +1,849 @@
+
+<!DOCTYPE html><html lang="ZH-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>使用Trae AI来创建ison7工程 - Ham' Notes</title>
+
+  
+    <meta name="description" content="2025年3月16日 使用Trae AI来创建ison7工程先通过一段描述我想要开发的功能文字描述给Trae，要求Trae帮我选型，然后将选型的架构做了一些定制化，完成一个设想的架构雏形，将架构中的内容给到Trae AI，生成目录的基本结构，完善技术栈选型：前端使用React Flow+Canvas实现节点交互，后端采用Node.js主服务+Python辅助AI模块，数据库组合PostgreSQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Trae AI来创建ison7工程">
+<meta property="og:url" content="https://ham-ison.github.io/2025/03/21/2025-03-16-%E4%BD%BF%E7%94%A8Trae%20AI%E6%9D%A5%E5%88%9B%E5%BB%BAison7%E5%B7%A5%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Ham&#39; Notes">
+<meta property="og:description" content="2025年3月16日 使用Trae AI来创建ison7工程先通过一段描述我想要开发的功能文字描述给Trae，要求Trae帮我选型，然后将选型的架构做了一些定制化，完成一个设想的架构雏形，将架构中的内容给到Trae AI，生成目录的基本结构，完善技术栈选型：前端使用React Flow+Canvas实现节点交互，后端采用Node.js主服务+Python辅助AI模块，数据库组合PostgreSQL">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-22T02:59:43.171Z">
+<meta property="article:author" content="HAM &lt; hamiosn@qq.com &gt;">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/logo/AM.ico" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Ham' Notes</div><div class="sub cap">Bionic Engine</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/21/2025-03-16-%E4%BD%BF%E7%94%A8Trae%20AI%E6%9D%A5%E5%88%9B%E5%BB%BAison7%E5%B7%A5%E7%A8%8B/"><span class="title">使用Trae AI来创建ison7工程</span></a><a class="item title" href="/2025/03/22/2022-03-29-Rendering-a-Scene-with-Deferred-Lighting/"><span class="title">[object Object]</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-03-20T16:00:00.000Z">2025-03-21</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-03-22T02:59:43.171Z">2025-03-22</time></span></div></div></div>
+    
+    <div class="bottom">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>使用Trae AI来创建ison7工程</span></h1>
+        <div class="text subtitle">Use Trae AI to create ison7 project</div>
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="2025年3月16日-使用Trae-AI来创建ison7工程"><a href="#2025年3月16日-使用Trae-AI来创建ison7工程" class="headerlink" title="2025年3月16日 使用Trae AI来创建ison7工程"></a>2025年3月16日 使用Trae AI来创建ison7工程</h1><p>先通过一段描述我想要开发的功能文字描述给Trae，要求Trae帮我选型，然后将选型的架构做了一些定制化，完成一个设想的架构雏形，将架构中的内容给到Trae AI，生成目录的基本结构，完善技术栈选型：前端使用React Flow+Canvas实现节点交互，后端采用Node.js主服务+Python辅助AI模块，数据库组合PostgreSQL存储结构化数据+MongoDB存文档。建议优先建立项目基础框架，补充缺失的代码目录如src&#x2F;features协作模块、src&#x2F;api接口层，并完善Electron集成配置。创建了项目基础目录结构，包括前端功能模块、API接口层以及Electron主进程配置，为后续功能开发打下基础。<br>执行以下命令后，启动项目，暂时还无法显示内容，生成的程序还需要进行调整。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run <span class="built_in">start</span></span><br></pre></td></tr></table></figure>
+<h1 id="让DeepSeek给我写一下ison7的架构设计方案"><a href="#让DeepSeek给我写一下ison7的架构设计方案" class="headerlink" title="让DeepSeek给我写一下ison7的架构设计方案"></a>让DeepSeek给我写一下ison7的架构设计方案</h1><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">最简单的提示词工程：</span><br><span class="line"># 角色：你是一个软件设计专家</span><br><span class="line"># 任务：请帮我修改一下以下内容的描述，让文字更专业更有逻辑性</span><br><span class="line"># 内容：先通过一段描述我想要开发的功能文字描述给Trae，要求Trae帮我选型，然后将选型的架构做了一些定制化，完成一个设想的架构雏形，将架构中的内容给到Trae AI，生成目录的基本结构，完善技术栈选型：前端使用React Flow+Canvas实现节点交互，后端采用Node.js主服务+Python辅助AI模块，数据库组合PostgreSQL存储结构化数据+MongoDB存文档。建议优先建立项目基础框架，补充缺失的代码目录如src/features协作模块、src/api接口层，并完善Electron集成配置。创建了项目基础目录结构，包括前端功能模块、API接口层以及Electron主进程配置，为后续功能开发打下基础。</span><br><span class="line">执行以下命令后，启动项目，暂时还无法显示内容，生成的程序还需要进行调整。</span><br></pre></td></tr></table></figure>
+
+<p>以下是针对您需求的优化重构方案，采用专业软件架构文档格式呈现：</p>
+<h1 id="智能节点编排系统架构设计方案"><a href="#智能节点编排系统架构设计方案" class="headerlink" title="智能节点编排系统架构设计方案"></a>智能节点编排系统架构设计方案</h1><h2 id="一、系统架构设计方法论"><a href="#一、系统架构设计方法论" class="headerlink" title="一、系统架构设计方法论"></a>一、系统架构设计方法论</h2><ol>
+<li><strong>需求驱动选型原则</strong></li>
+</ol>
+<ul>
+<li>基于可视化编排的核心需求，采用React Flow+Canvas双引擎架构</li>
+<li>遵循”前端轻量化，后端服务化”的设计理念，实现关注点分离</li>
+<li>采用混合持久化策略应对不同数据形态需求</li>
+</ul>
+<ol start="2">
+<li><strong>技术选型决策树</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[功能需求] --&gt; B&#123;是否需要实时协作?&#125;</span><br><span class="line">    B --&gt;|是| C[CRDT+WebSocket]</span><br><span class="line">    B --&gt;|否| D[RESTful API]</span><br><span class="line">    C --&gt; E[Yjs/Turbo协议选型]</span><br><span class="line">    D --&gt; F[Express/Nest.js]</span><br><span class="line">    A --&gt; G&#123;是否需要AI集成?&#125;</span><br><span class="line">    G --&gt;|是| H[Python微服务]</span><br><span class="line">    G --&gt;|否| I[纯Node.js]</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、技术架构蓝图"><a href="#二、技术架构蓝图" class="headerlink" title="二、技术架构蓝图"></a>二、技术架构蓝图</h2><h3 id="2-1-分层架构设计"><a href="#2-1-分层架构设计" class="headerlink" title="2.1 分层架构设计"></a>2.1 分层架构设计</h3><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>技术组件</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>展示层</strong></td>
+<td>React Flow Pro + Konva.js</td>
+<td>实现可视化节点编排与高阶交互</td>
+</tr>
+<tr>
+<td><strong>业务逻辑层</strong></td>
+<td>Redux Toolkit + Zustand</td>
+<td>状态管理与业务规则处理</td>
+</tr>
+<tr>
+<td><strong>服务层</strong></td>
+<td>Node.js主服务 + Python AI微服务</td>
+<td>核心业务处理与智能增强</td>
+</tr>
+<tr>
+<td><strong>数据层</strong></td>
+<td>PostgreSQL + MongoDB</td>
+<td>结构化数据与文档型数据分离存储</td>
+</tr>
+<tr>
+<td><strong>基础设施层</strong></td>
+<td>Docker + Kubernetes</td>
+<td>容器化部署与资源调度</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-关键模块设计"><a href="#2-2-关键模块设计" class="headerlink" title="2.2 关键模块设计"></a>2.2 关键模块设计</h3><p><strong>前端工程化方案</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">src/</span><br><span class="line">├── features/         <span class="comment"># 功能模块</span></span><br><span class="line">│   ├── workflow/     <span class="comment"># 节点编排核心逻辑</span></span><br><span class="line">│   ├── collaboration <span class="comment"># 实时协作实现</span></span><br><span class="line">│   └── ai/           <span class="comment"># AI交互模块</span></span><br><span class="line">├── api/              <span class="comment"># 接口层</span></span><br><span class="line">│   ├── rest/         <span class="comment"># RESTful适配器</span></span><br><span class="line">│   └── websocket/    <span class="comment"># WS协议处理</span></span><br><span class="line">├── electron/         <span class="comment"># 桌面端集成</span></span><br><span class="line">│   ├── main.js       <span class="comment"># 主进程配置</span></span><br><span class="line">│   └── preload.js    <span class="comment"># 进程通信桥接</span></span><br><span class="line">└── shared/           <span class="comment"># 通用组件库</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Electron集成方案</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">electron</span>(&#123;</span><br><span class="line">      <span class="attr">main</span>: &#123;</span><br><span class="line">        <span class="attr">entry</span>: <span class="string">&#x27;electron/main.js&#x27;</span>,</span><br><span class="line">        <span class="attr">vite</span>: &#123;</span><br><span class="line">          <span class="attr">build</span>: &#123;</span><br><span class="line">            <span class="attr">outDir</span>: <span class="string">&#x27;dist/electron&#x27;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">preload</span>: &#123;</span><br><span class="line">        <span class="attr">input</span>: <span class="string">&#x27;electron/preload.js&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、实施路线图"><a href="#三、实施路线图" class="headerlink" title="三、实施路线图"></a>三、实施路线图</h2><h3 id="3-1-基础框架搭建阶段"><a href="#3-1-基础框架搭建阶段" class="headerlink" title="3.1 基础框架搭建阶段"></a>3.1 基础框架搭建阶段</h3><ol>
+<li><strong>工程初始化</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm create vite@latest --template react-ts</span><br><span class="line">npm install @electron-forge/cli -g</span><br><span class="line">electron-forge init src/electron --template=vite</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>核心依赖安装</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install reactflow konva react-konva yjs @yjs/provider-websocket</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-开发环境配置要点"><a href="#3-2-开发环境配置要点" class="headerlink" title="3.2 开发环境配置要点"></a>3.2 开发环境配置要点</h3><ol>
+<li><strong>跨域解决方案</strong></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server/middleware/cors.js</span></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">cors</span>(&#123;</span><br><span class="line">  <span class="attr">origin</span>: process.<span class="property">env</span>.<span class="property">ELECTRON_MODE</span> </span><br><span class="line">    ? <span class="string">&#x27;file://&#x27;</span> </span><br><span class="line">    : [<span class="string">&#x27;http://localhost:3000&#x27;</span>],</span><br><span class="line">  <span class="attr">methods</span>: [<span class="string">&#x27;GET&#x27;</span>,<span class="string">&#x27;POST&#x27;</span>,<span class="string">&#x27;PUT&#x27;</span>,<span class="string">&#x27;DELETE&#x27;</span>]</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>构建优化配置</strong></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// electron/main.js</span></span><br><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> === <span class="string">&#x27;development&#x27;</span>) &#123;</span><br><span class="line">  win.<span class="title function_">loadURL</span>(<span class="string">&#x27;http://localhost:3000&#x27;</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  win.<span class="title function_">loadFile</span>(path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;../dist/index.html&#x27;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、问题诊断与解决方案"><a href="#四、问题诊断与解决方案" class="headerlink" title="四、问题诊断与解决方案"></a>四、问题诊断与解决方案</h2><p><strong>当前启动异常排查指南</strong></p>
+<ol>
+<li><strong>依赖完整性检查</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ci --force <span class="comment"># 强制清理缓存安装</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>进程冲突检测</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -i :3000 <span class="comment"># 检查端口占用</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>构建产物验证</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx electron-builder --<span class="built_in">dir</span> --config <span class="comment"># 检查打包配置</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、后续开发建议"><a href="#五、后续开发建议" class="headerlink" title="五、后续开发建议"></a>五、后续开发建议</h2><ol>
+<li><strong>架构增强方向</strong></li>
+</ol>
+<ul>
+<li>引入SWC编译器优化构建速度</li>
+<li>配置Module Federation实现动态加载</li>
+<li>集成Sentry进行错误监控</li>
+</ul>
+<ol start="2">
+<li><strong>质量保障措施</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[单元测试] --&gt; B(Jest+Testing-Library)</span><br><span class="line">    C[E2E测试] --&gt; D(Cypress)</span><br><span class="line">    E[集成测试] --&gt; F(Supertest)</span><br><span class="line">    G[性能测试] --&gt; H(Lighthouse)</span><br><span class="line">    I[安全测试] --&gt; J(Snyk)</span><br></pre></td></tr></table></figure>
+
+<p>本方案通过模块化设计、分层架构和工程化配置，建立了可扩展的开发基础。建议后续采用Monorepo结构管理多平台代码，逐步实现从MVP到生产环境的演进。</p>
+<blockquote>
+<p>以下是早期用于设想的架构设计方案：</p>
+</blockquote>
+<h1 id="ison7-软件架构选型"><a href="#ison7-软件架构选型" class="headerlink" title="ison7 软件架构选型"></a><strong>ison7 软件架构选型</strong></h1><h2 id="1-软件架构设计"><a href="#1-软件架构设计" class="headerlink" title="1. 软件架构设计"></a><strong>1. 软件架构设计</strong></h2><h3 id="架构模式"><a href="#架构模式" class="headerlink" title="架构模式"></a><strong>架构模式</strong></h3><ul>
+<li><strong>前后端分离</strong>（前端和后端通过 API 交互，提升扩展性）</li>
+<li><strong>微服务架构</strong>（拆分不同服务，如存储、协作、AI 辅助）</li>
+<li><strong>Serverless</strong>（低成本、弹性扩展需求）</li>
+</ul>
+<hr>
+<h2 id="2-技术栈选型"><a href="#2-技术栈选型" class="headerlink" title="2. 技术栈选型"></a><strong>2. 技术栈选型</strong></h2><h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a><strong>前端</strong></h3><h4 id="选型方案"><a href="#选型方案" class="headerlink" title="选型方案"></a><strong>选型方案</strong></h4><ol>
+<li><strong>框架：Vite + React + TypeScript + Canvas</strong><ul>
+<li>组件化开发，生态丰富，适合复杂交互</li>
+<li>TypeScript 提高代码可维护性</li>
+<li>Vite + React + Canvas（轻量、可定制）</li>
+<li>待定：<a target="_blank" rel="noopener" href="https://reactflow.dev/">react-flow</a>（轻量、可定制、支持拖拽）</li>
+</ul>
+</li>
+<li><strong>UI 组件库</strong><ul>
+<li>Tailwind CSS（轻量、可自定义）</li>
+<li>Shadcn&#x2F;ui（现代设计）</li>
+</ul>
+</li>
+</ol>
+<h4 id="关键技术"><a href="#关键技术" class="headerlink" title="关键技术"></a><strong>关键技术</strong></h4><ul>
+<li><strong>Canvas &#x2F; SVG 绘制思维导图</strong></li>
+<li><strong>WebSocket 实时协作</strong></li>
+<li><strong>拖拽 &amp; 节点连接</strong></li>
+<li><strong>快捷键支持（Ctrl+Z 撤销，Ctrl+S 保存）</strong></li>
+<li><strong>Markdown &#x2F; JSON 格式存储导出</strong></li>
+</ul>
+<hr>
+<h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a><strong>后端</strong></h3><h4 id="选型方案-1"><a href="#选型方案-1" class="headerlink" title="选型方案"></a><strong>选型方案</strong></h4><ol>
+<li><strong>框架</strong><ul>
+<li><strong>Node.js</strong>（轻量、适合前后端同构）</li>
+<li><strong>后端待定</strong>（高性能）</li>
+<li><strong>Python</strong>（适合 AI 辅助功能）</li>
+</ul>
+</li>
+<li><strong>实时协作</strong><ul>
+<li>网络通信待定</li>
+<li>待定：CRDT（冲突自由数据类型）支持多人编辑</li>
+</ul>
+</li>
+<li><strong>AI 生成思维导图</strong><ul>
+<li>待定：OpenAI &#x2F; ChatGPT 接口</li>
+<li>自定义 NLP 解析文本生成结构化数据</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a><strong>数据库</strong></h3><ul>
+<li><strong>待定：PostgreSQL</strong>（支持 JSON 数据存储）</li>
+<li><strong>待定：MongoDB</strong>（更适合文档存储）</li>
+<li><strong>待定：Redis</strong>（缓存 &amp; 协作数据同步）</li>
+<li><strong>待定：Firebase Firestore</strong>（Serverless 解决方案）</li>
+</ul>
+<hr>
+<h2 id="3-部署方案"><a href="#3-部署方案" class="headerlink" title="3. 部署方案"></a><strong>3. 部署方案</strong></h2><ul>
+<li><strong>待定：Docker + Kubernetes</strong>（适合规模化应用）</li>
+<li><strong>待定：Serverless（Vercel &#x2F; Cloud Functions）</strong>（适合 MVP 快速上线）</li>
+<li><strong>待定：数据库托管（Supabase &#x2F; Firebase）</strong>（降低维护成本）</li>
+</ul>
+<hr>
+<h2 id="4-关键功能"><a href="#4-关键功能" class="headerlink" title="4. 关键功能"></a><strong>4. 关键功能</strong></h2><p>✅ <strong>图绘制</strong><br>✅ <strong>实时协作</strong><br>✅ <strong>AI 生成</strong><br>✅ <strong>跨平台支持（Web、桌面端 Electron、移动端 React Native）</strong><br>✅ <strong>云端存储 &amp; 导出（JSON、Markdown、图片、PDF）</strong><br>✅ <strong>权限管理 &amp; 共享</strong>  </p>
+<hr>
+<blockquote>
+<p>ison7 软件设计方案及设计描述文档</p>
+</blockquote>
+<h1 id="ison7-Level0-设计方案"><a href="#ison7-Level0-设计方案" class="headerlink" title="ison7 Level0 设计方案"></a>ison7 Level0 设计方案</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    subgraph 客户端层[客户端层]</span><br><span class="line">        A1[Web 客户端 React Vite]</span><br><span class="line">        A2[桌面客户端 Electron]</span><br><span class="line">        A3[移动客户端 React Native]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph 前端应用[前端应用]</span><br><span class="line">        B1[前端 UI &amp; 交互]</span><br><span class="line">        B2[WebSocket 通信模块]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph API网关[API 网关]</span><br><span class="line">        C[API 网关/反向代理]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph 后端微服务[后端微服务]</span><br><span class="line">        D1[用户与权限管理服务]</span><br><span class="line">        D2[设计数据服务]</span><br><span class="line">        D3[实时协作服务 CRDT, WebSocket]</span><br><span class="line">        D4[AI 辅助服务 Python/OpenAI]</span><br><span class="line">        D5[导出/打印服务]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph 数据存储层[数据存储层]</span><br><span class="line">        E1[(PostgreSQL / Firestore)]</span><br><span class="line">        E2[(MongoDB)]</span><br><span class="line">        E3[(Redis)]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    subgraph 部署与运维[部署与运维]</span><br><span class="line">        F1[Docker &amp; Kubernetes]</span><br><span class="line">        F2[Serverless 部署 Vercel/Cloud Functions]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% 连接客户端与前端应用</span><br><span class="line">    A1 --&gt; B1</span><br><span class="line">    A2 --&gt; B1</span><br><span class="line">    A3 --&gt; B1</span><br><span class="line">    </span><br><span class="line">    %% 前端与 API 网关交互</span><br><span class="line">    B1 --&gt; C</span><br><span class="line">    B2 --&gt; C</span><br><span class="line">    </span><br><span class="line">    %% API 网关转发请求到后端服务</span><br><span class="line">    C --&gt; D1</span><br><span class="line">    C --&gt; D2</span><br><span class="line">    C --&gt; D3</span><br><span class="line">    C --&gt; D4</span><br><span class="line">    C --&gt; D5</span><br><span class="line">    </span><br><span class="line">    %% 后端服务与数据存储交互</span><br><span class="line">    D1 --&gt; E1</span><br><span class="line">    D2 --&gt; E1</span><br><span class="line">    D2 --&gt; E2</span><br><span class="line">    D3 --&gt; E3</span><br><span class="line">    </span><br><span class="line">    %% 后端服务可调用 AI 第三方接口（如 OpenAI）</span><br><span class="line">    D4 -. 调用 .-&gt; G&#123;&#123;OpenAI/ChatGPT&#125;&#125;</span><br><span class="line">    </span><br><span class="line">    %% 整个系统部署在运维平台</span><br><span class="line">    C --- F1</span><br><span class="line">    D1 --- F1</span><br><span class="line">    D2 --- F1</span><br><span class="line">    D3 --- F1</span><br><span class="line">    D4 --- F1</span><br><span class="line">    D5 --- F1</span><br><span class="line">    </span><br><span class="line">    %% 或者采用 Serverless 部署方式</span><br><span class="line">    C --- F2</span><br><span class="line">    D1 --- F2</span><br><span class="line">    D2 --- F2</span><br><span class="line">    D3 --- F2</span><br><span class="line">    D4 --- F2</span><br><span class="line">    D5 --- F2</span><br></pre></td></tr></table></figure>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>ison7 是一款基于 Web 的应用程序，旨在为用户提供类似 ComfyUI 的设计思维工具。该应用以 React Flow 的形式呈现，支持多种功能，如自定义节点、实时协作、AI 生成思维导图等。本设计方案将详细介绍软件的架构、技术选型、功能模块以及部署方案。</p>
+<h2 id="二、软件架构设计"><a href="#二、软件架构设计" class="headerlink" title="二、软件架构设计"></a>二、软件架构设计</h2><h3 id="2-1-架构模式"><a href="#2-1-架构模式" class="headerlink" title="2.1 架构模式"></a>2.1 架构模式</h3><ul>
+<li>前后端分离 ：前端和后端通过 API 进行交互，这种模式可以提升系统的扩展性和可维护性。前端专注于用户界面和交互逻辑，后端负责处理业务逻辑和数据存储。</li>
+<li>微服务架构 ：将不同的功能拆分成独立的微服务，如存储服务、协作服务、AI 辅助服务等。微服务架构可以提高系统的灵活性和可扩展性，便于团队并行开发和维护。</li>
+<li>Serverless ：采用 Serverless 架构可以降低成本，并且根据需求进行弹性扩展。Serverless 服务可以自动处理服务器的部署和管理，开发者只需关注业务逻辑。</li>
+</ul>
+<h3 id="2-2-技术栈选型"><a href="#2-2-技术栈选型" class="headerlink" title="2.2 技术栈选型"></a>2.2 技术栈选型</h3><h4 id="2-2-1-前端"><a href="#2-2-1-前端" class="headerlink" title="2.2.1 前端"></a>2.2.1 前端</h4><ul>
+<li>框架 ：采用 Vite + React + TypeScript + Canvas 的组合。 React 是一个流行的 JavaScript 库，用于构建用户界面，支持组件化开发，生态丰富，适合复杂交互。 TypeScript 可以提高代码的可维护性和可读性。 Vite 是一个快速的构建工具，能够提供更快的开发体验。 Canvas 用于绘制思维导图和节点连接。同时，考虑使用 react-flow 来实现节点的拖拽和连接功能。</li>
+<li>UI 组件库 ：使用 Tailwind CSS 和 Shadcn&#x2F;ui 。 Tailwind CSS 是一个轻量级的 CSS 框架，支持自定义样式。 Shadcn&#x2F;ui 提供现代设计的 UI 组件。</li>
+</ul>
+<h4 id="2-2-2-后端"><a href="#2-2-2-后端" class="headerlink" title="2.2.2 后端"></a>2.2.2 后端</h4><ul>
+<li>框架 ：选择 Node.js 作为后端框架，它轻量级且适合前后端同构开发。同时，考虑使用 Python 来实现 AI 辅助功能，因为 Python 在机器学习和自然语言处理领域有丰富的库和工具。</li>
+<li>实时协作 ：网络通信方式待定，考虑使用 CRDT （冲突自由数据类型）来支持多人实时编辑，确保数据的一致性。</li>
+<li>AI 生成思维导图 ：待定使用 OpenAI &#x2F; ChatGPT 接口，也可以开发自定义的 NLP 算法来解析文本并生成结构化数据。</li>
+</ul>
+<h4 id="2-2-3-数据库"><a href="#2-2-3-数据库" class="headerlink" title="2.2.3 数据库"></a>2.2.3 数据库</h4><ul>
+<li>PostgreSQL ：支持 JSON 数据存储，适合存储节点配置和用户数据。</li>
+<li>MongoDB ：更适合文档存储，可用于存储思维导图的结构和历史记录。</li>
+<li>Redis ：用于缓存和协作数据同步，提高系统的性能和响应速度。</li>
+<li>Firebase Firestore ：作为 Serverless 解决方案，可降低数据库的维护成本。</li>
+</ul>
+<h3 id="2-3-部署方案"><a href="#2-3-部署方案" class="headerlink" title="2.3 部署方案"></a>2.3 部署方案</h3><ul>
+<li>Docker + Kubernetes ：适合规模化应用的部署，能够实现自动化的容器编排和管理。</li>
+<li>Serverless ：如 Vercel &#x2F; Cloud Functions ，适合 MVP 快速上线，降低开发和部署成本。</li>
+<li>数据库托管 ：如 Supabase &#x2F; Firebase ，可以降低数据库的维护成本。</li>
+</ul>
+<h2 id="三、功能模块设计"><a href="#三、功能模块设计" class="headerlink" title="三、功能模块设计"></a>三、功能模块设计</h2><h3 id="3-1-基于白板的设计思维"><a href="#3-1-基于白板的设计思维" class="headerlink" title="3.1 基于白板的设计思维"></a>3.1 基于白板的设计思维</h3><ul>
+<li>自定义节点 ：用户可以自定义各类节点，节点的样式使用框架显示，节点内容包括大模型配置选项和参数配置。</li>
+<li>节点连接 ：节点与节点之间使用线连接，线条的显示支持动画效果。</li>
+</ul>
+<h3 id="3-2-快捷键支持"><a href="#3-2-快捷键支持" class="headerlink" title="3.2 快捷键支持"></a>3.2 快捷键支持</h3><p>支持常见的快捷键，如 Ctrl+Z 撤销操作， Ctrl+S 保存当前设计。</p>
+<h3 id="3-3-数据存储与导出"><a href="#3-3-数据存储与导出" class="headerlink" title="3.3 数据存储与导出"></a>3.3 数据存储与导出</h3><p>支持多种格式的存储和导出，包括 Markdown 、 JSON 、 PDF 、 图片 、 SVG 、 HTML 等。</p>
+<h3 id="3-4-AI-生成思维导图"><a href="#3-4-AI-生成思维导图" class="headerlink" title="3.4 AI 生成思维导图"></a>3.4 AI 生成思维导图</h3><p>通过调用 OpenAI &#x2F; ChatGPT 接口或自定义 NLP 算法，根据用户输入的文本生成思维导图。</p>
+<h3 id="3-5-实时协作"><a href="#3-5-实时协作" class="headerlink" title="3.5 实时协作"></a>3.5 实时协作</h3><p>支持多人实时协作编辑，使用 WebSocket 进行实时通信，确保数据的一致性。</p>
+<h3 id="3-6-跨平台支持"><a href="#3-6-跨平台支持" class="headerlink" title="3.6 跨平台支持"></a>3.6 跨平台支持</h3><p>支持在 Web、桌面端（使用 Electron）和移动端（使用 React Native）上运行。</p>
+<h3 id="3-7-其他功能"><a href="#3-7-其他功能" class="headerlink" title="3.7 其他功能"></a>3.7 其他功能</h3><ul>
+<li>权限管理 ：对不同用户角色设置不同的操作权限。</li>
+<li>国际化 ：支持多种语言，方便不同地区的用户使用。</li>
+<li>主题切换 ：提供多种主题供用户选择。</li>
+<li>自定义样式 ：用户可以自定义节点和界面的样式。</li>
+<li>自定义快捷键 ：用户可以根据自己的习惯设置快捷键。</li>
+<li>缩略图显示 ：提供思维导图的缩略图，方便用户快速浏览。</li>
+<li>历史记录 ：记录用户的操作历史，支持回滚和查看。</li>
+<li>分享 ：用户可以将思维导图分享给他人。</li>
+<li>导入导出 ：支持从外部文件导入思维导图，也可以将当前设计导出到文件。</li>
+<li>打印 ：支持打印当前思维导图。</li>
+<li>付费界面 ：提供免费使用和月付费、年付费、终生使用的选项。</li>
+</ul>
+<h2 id="四、设计描述文档"><a href="#四、设计描述文档" class="headerlink" title="四、设计描述文档"></a>四、设计描述文档</h2><h3 id="4-1-功能模块详细设计"><a href="#4-1-功能模块详细设计" class="headerlink" title="4.1 功能模块详细设计"></a>4.1 功能模块详细设计</h3><h4 id="4-1-1-基于白板的设计思维"><a href="#4-1-1-基于白板的设计思维" class="headerlink" title="4.1.1 基于白板的设计思维"></a>4.1.1 基于白板的设计思维</h4><ul>
+<li>节点管理 ：用户可以通过鼠标点击或快捷键创建、删除和编辑节点。节点的样式和内容可以通过配置文件进行自定义。</li>
+<li>节点连接 ：用户可以通过鼠标拖拽的方式连接两个节点，系统会自动绘制连接线，并支持动画效果。</li>
+</ul>
+<h4 id="4-1-2-快捷键支持"><a href="#4-1-2-快捷键支持" class="headerlink" title="4.1.2 快捷键支持"></a>4.1.2 快捷键支持</h4><ul>
+<li>撤销操作 ：按下 Ctrl+Z 键，系统会撤销上一步操作。</li>
+<li>保存操作 ：按下 Ctrl+S 键，系统会保存当前设计到本地或数据库。</li>
+</ul>
+<h4 id="4-1-3-数据存储与导出"><a href="#4-1-3-数据存储与导出" class="headerlink" title="4.1.3 数据存储与导出"></a>4.1.3 数据存储与导出</h4><ul>
+<li>存储 ：系统会将用户的设计数据以 JSON 格式存储到数据库中，方便后续的查询和恢复。</li>
+<li>导出 ：用户可以选择将当前设计导出为 Markdown 、 PDF 、 图片 、 SVG 、 HTML 等格式。</li>
+</ul>
+<h4 id="4-1-4-AI-生成思维导图"><a href="#4-1-4-AI-生成思维导图" class="headerlink" title="4.1.4 AI 生成思维导图"></a>4.1.4 AI 生成思维导图</h4><ul>
+<li>用户输入 ：用户输入一段文本，系统会调用 OpenAI &#x2F; ChatGPT 接口或自定义 NLP 算法进行解析。</li>
+<li>生成思维导图 ：根据解析结果，系统会自动生成思维导图，并显示在白板上。</li>
+</ul>
+<h4 id="4-1-5-实时协作"><a href="#4-1-5-实时协作" class="headerlink" title="4.1.5 实时协作"></a>4.1.5 实时协作</h4><ul>
+<li>用户连接 ：多个用户可以通过 WebSocket 连接到同一个设计项目。</li>
+<li>数据同步 ：当一个用户对思维导图进行修改时，系统会实时将修改同步到其他用户的界面上。</li>
+</ul>
+<h4 id="4-1-6-跨平台支持"><a href="#4-1-6-跨平台支持" class="headerlink" title="4.1.6 跨平台支持"></a>4.1.6 跨平台支持</h4><ul>
+<li>Web 端 ：使用浏览器直接访问应用程序，无需安装额外的软件。</li>
+<li>桌面端 ：使用 Electron 打包应用程序，支持在 Windows、Mac 和 Linux 系统上运行。</li>
+<li>移动端 ：使用 React Native 开发移动应用，支持在 iOS 和 Android 系统上运行。</li>
+</ul>
+<h3 id="4-2-技术实现细节"><a href="#4-2-技术实现细节" class="headerlink" title="4.2 技术实现细节"></a>4.2 技术实现细节</h3><h4 id="4-2-1-前端实现"><a href="#4-2-1-前端实现" class="headerlink" title="4.2.1 前端实现"></a>4.2.1 前端实现</h4><ul>
+<li>组件化开发 ：使用 React 组件化开发，将不同的功能模块封装成独立的组件，提高代码的可维护性和复用性。</li>
+<li>TypeScript 类型检查 ：使用 TypeScript 进行类型检查，确保代码的正确性和可维护性。</li>
+<li>Canvas 绘制 ：使用 Canvas API 绘制思维导图和节点连接，实现动画效果。</li>
+<li>WebSocket 通信 ：使用 WebSocket 实现实时协作功能，确保数据的实时同步。</li>
+</ul>
+<h4 id="4-2-2-后端实现"><a href="#4-2-2-后端实现" class="headerlink" title="4.2.2 后端实现"></a>4.2.2 后端实现</h4><ul>
+<li>Node.js 服务 ：使用 Node.js 搭建后端服务，处理前端的请求和业务逻辑。</li>
+<li>Python 脚本 ：使用 Python 脚本实现 AI 辅助功能，如 NLP 解析和思维导图生成。</li>
+<li>数据库操作 ：使用相应的数据库驱动程序与数据库进行交互，实现数据的存储和查询。</li>
+</ul>
+<h4 id="4-2-3-数据库设计"><a href="#4-2-3-数据库设计" class="headerlink" title="4.2.3 数据库设计"></a>4.2.3 数据库设计</h4><ul>
+<li>PostgreSQL ：设计表结构，存储用户信息、节点配置和思维导图数据。</li>
+<li>MongoDB ：存储思维导图的结构和历史记录，方便后续的查询和分析。</li>
+<li>Redis ：使用 Redis 作为缓存和协作数据同步的工具，提高系统的性能和响应速度。</li>
+<li>Firebase Firestore ：使用 Firebase Firestore 作为 Serverless 数据库，降低数据库的维护成本。</li>
+</ul>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>本设计方案详细介绍了 ison7 软件的架构、技术选型、功能模块以及部署方案。通过采用前后端分离、微服务架构和 Serverless 技术，提高了系统的扩展性和可维护性。同时，支持多种功能和跨平台使用，为用户提供了一个便捷的设计思维工具。</p>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2025/03/22/2022-03-29-Rendering-a-Scene-with-Deferred-Lighting/">[object Object]</a></div><div class="item" id="next"></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">HAM &lt; hamiosn@qq.com &gt;</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1">Stellar 1.29.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2025%E5%B9%B43%E6%9C%8816%E6%97%A5-%E4%BD%BF%E7%94%A8Trae-AI%E6%9D%A5%E5%88%9B%E5%BB%BAison7%E5%B7%A5%E7%A8%8B"><span class="toc-text">2025年3月16日 使用Trae AI来创建ison7工程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A9DeepSeek%E7%BB%99%E6%88%91%E5%86%99%E4%B8%80%E4%B8%8Bison7%E7%9A%84%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-text">让DeepSeek给我写一下ison7的架构设计方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E8%8A%82%E7%82%B9%E7%BC%96%E6%8E%92%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-text">智能节点编排系统架构设计方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="toc-text">一、系统架构设计方法论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE"><span class="toc-text">二、技术架构蓝图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">2.1 分层架构设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%85%B3%E9%94%AE%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-text">2.2 关键模块设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E6%96%BD%E8%B7%AF%E7%BA%BF%E5%9B%BE"><span class="toc-text">三、实施路线图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6%E6%90%AD%E5%BB%BA%E9%98%B6%E6%AE%B5"><span class="toc-text">3.1 基础框架搭建阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E8%A6%81%E7%82%B9"><span class="toc-text">3.2 开发环境配置要点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%97%AE%E9%A2%98%E8%AF%8A%E6%96%AD%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">四、问题诊断与解决方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%90%8E%E7%BB%AD%E5%BC%80%E5%8F%91%E5%BB%BA%E8%AE%AE"><span class="toc-text">五、后续开发建议</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ison7-%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E9%80%89%E5%9E%8B"><span class="toc-text">ison7 软件架构选型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">1. 软件架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="toc-text">架构模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8A%80%E6%9C%AF%E6%A0%88%E9%80%89%E5%9E%8B"><span class="toc-text">2. 技术栈选型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF"><span class="toc-text">前端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E5%9E%8B%E6%96%B9%E6%A1%88"><span class="toc-text">选型方案</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="toc-text">关键技术</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF"><span class="toc-text">后端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E5%9E%8B%E6%96%B9%E6%A1%88-1"><span class="toc-text">选型方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88"><span class="toc-text">3. 部署方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E5%8A%9F%E8%83%BD"><span class="toc-text">4. 关键功能</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ison7-Level0-%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-text">ison7 Level0 设计方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">一、概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">二、软件架构设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.1 架构模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8A%80%E6%9C%AF%E6%A0%88%E9%80%89%E5%9E%8B"><span class="toc-text">2.2 技术栈选型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E5%89%8D%E7%AB%AF"><span class="toc-text">2.2.1 前端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E5%90%8E%E7%AB%AF"><span class="toc-text">2.2.2 后端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">2.2.3 数据库</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88"><span class="toc-text">2.3 部署方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-text">三、功能模块设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9F%BA%E4%BA%8E%E7%99%BD%E6%9D%BF%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4"><span class="toc-text">3.1 基于白板的设计思维</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BF%AB%E6%8D%B7%E9%94%AE%E6%94%AF%E6%8C%81"><span class="toc-text">3.2 快捷键支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E4%B8%8E%E5%AF%BC%E5%87%BA"><span class="toc-text">3.3 数据存储与导出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-AI-%E7%94%9F%E6%88%90%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="toc-text">3.4 AI 生成思维导图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%AE%9E%E6%97%B6%E5%8D%8F%E4%BD%9C"><span class="toc-text">3.5 实时协作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%94%AF%E6%8C%81"><span class="toc-text">3.6 跨平台支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="toc-text">3.7 其他功能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%AE%BE%E8%AE%A1%E6%8F%8F%E8%BF%B0%E6%96%87%E6%A1%A3"><span class="toc-text">四、设计描述文档</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97%E8%AF%A6%E7%BB%86%E8%AE%BE%E8%AE%A1"><span class="toc-text">4.1 功能模块详细设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-%E5%9F%BA%E4%BA%8E%E7%99%BD%E6%9D%BF%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4"><span class="toc-text">4.1.1 基于白板的设计思维</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2-%E5%BF%AB%E6%8D%B7%E9%94%AE%E6%94%AF%E6%8C%81"><span class="toc-text">4.1.2 快捷键支持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-3-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E4%B8%8E%E5%AF%BC%E5%87%BA"><span class="toc-text">4.1.3 数据存储与导出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-4-AI-%E7%94%9F%E6%88%90%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="toc-text">4.1.4 AI 生成思维导图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-5-%E5%AE%9E%E6%97%B6%E5%8D%8F%E4%BD%9C"><span class="toc-text">4.1.5 实时协作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-6-%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%94%AF%E6%8C%81"><span class="toc-text">4.1.6 跨平台支持</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text">4.2 技术实现细节</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-%E5%89%8D%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.2.1 前端实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-%E5%90%8E%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.2.2 后端实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="toc-text">4.2.3 数据库设计</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">五、总结</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
